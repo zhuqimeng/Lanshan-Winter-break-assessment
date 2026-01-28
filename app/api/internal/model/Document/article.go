@@ -1,4 +1,4 @@
-package Article
+package Document
 
 import "gorm.io/gorm"
 

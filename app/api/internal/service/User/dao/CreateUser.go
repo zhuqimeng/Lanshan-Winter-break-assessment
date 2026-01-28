@@ -2,16 +2,18 @@ package dao
 
 import (
 	"errors"
-	"log"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
 	"zhihu/utils/randoms"
 	"zhihu/utils/strings"
+
+	"go.uber.org/zap"
 )
 
 func CreateUser(req *User.CreateUserReq) error {
 	var count int64
 	if err := configs.Db.Model(&User.User{}).Where("name = ?", req.Name).Count(&count).Error; err != nil {
+		configs.Logger.Error("CreateUser", zap.Error(err))
 		return err
 	}
 	if count > 0 {
@@ -32,7 +34,7 @@ func CreateUser(req *User.CreateUserReq) error {
 	// 创建用户信息
 
 	if err := configs.Db.Create(&user).Error; err != nil {
-		log.Fatal("用户创建失败：", err)
+		configs.Logger.Error("CreateUser", zap.Error(err))
 		return err
 	}
 	// 写入数据库

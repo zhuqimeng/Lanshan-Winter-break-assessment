@@ -1,4 +1,4 @@
-package QA
+package Document
 
 import "gorm.io/gorm"
 

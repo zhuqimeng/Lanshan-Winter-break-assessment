@@ -2,9 +2,11 @@ package tokens
 
 import (
 	"time"
+	"zhihu/app/api/configs"
 
 	"github.com/bwmarrin/snowflake"
 	"github.com/golang-jwt/jwt/v5"
+	"go.uber.org/zap"
 )
 
 func MakeToken(username string, expTime time.Time) (string, error) {
@@ -29,6 +31,7 @@ func MakeToken(username string, expTime time.Time) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte("my_secret_key"))
 	if err != nil {
+		configs.Logger.Error("MakeToken", zap.Error(err))
 		return "", err
 	}
 	return tokenString, nil

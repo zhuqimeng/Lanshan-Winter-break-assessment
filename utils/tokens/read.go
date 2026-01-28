@@ -2,8 +2,10 @@ package tokens
 
 import (
 	"fmt"
+	"zhihu/app/api/configs"
 
 	"github.com/golang-jwt/jwt/v5"
+	"go.uber.org/zap"
 )
 
 func CheckToken(tokenString string) (string, error) {
@@ -14,12 +16,12 @@ func CheckToken(tokenString string) (string, error) {
 		return []byte("my_secret_key"), nil
 	})
 	if err != nil || !token.Valid {
-		fmt.Println("JWT无效:", err)
+		configs.Logger.Warn("CheckToken", zap.Error(err))
 		return "", err
 	}
 	claims, ok := token.Claims.(*TokenClaims)
 	if ok {
-		fmt.Println("JWT声明:", claims)
+		configs.Logger.Info("CheckToken", zap.Any("JWT声明:", claims))
 		return claims.Username, nil
 	}
 	return "", nil
