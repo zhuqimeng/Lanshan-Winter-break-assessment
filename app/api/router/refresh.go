@@ -25,7 +25,7 @@ func refresh(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"code":    http.StatusUnauthorized,
-			"message": err.Error(),
+			"message": "refresh token 过期或失效，请重新登录",
 		})
 		configs.Logger.Error("refresh", zap.Error(err))
 		return
@@ -40,5 +40,5 @@ func refresh(c *gin.Context) {
 		"code":             http.StatusOK,
 		"new_access_token": token,
 	})
-	configs.Logger.Info("refresh", zap.String("status", "success"))
+	configs.Logger.Info("refresh", zap.String("username", username))
 }

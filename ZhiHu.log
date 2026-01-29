@@ -1,7 +1,0 @@
-{"level":"INFO","time":"2026-01-28 15:46:53.386","caller":"runtime/proc.go:285","msg":"init success"}
-{"level":"INFO","time":"2026-01-28 16:07:23.633","caller":"runtime/proc.go:285","msg":"init success"}
-{"level":"INFO","time":"2026-01-28 16:07:26.979","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test2","status":"success"}
-{"level":"INFO","time":"2026-01-28 16:08:28.716","caller":"gin@v1.11.0/context.go:192","msg":"UpdPwd","username":"test2"}
-{"level":"INFO","time":"2026-01-28 16:14:48.027","caller":"runtime/proc.go:285","msg":"init success"}
-{"level":"INFO","time":"2026-01-28 16:14:55.816","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2016422856530857984","aud":["ZhiHu"],"exp":1769594846,"nbf":1769587646,"iat":1769587646,"jti":"2016422856530857984"}}}
-{"level":"INFO","time":"2026-01-28 16:14:55.827","caller":"gin@v1.11.0/context.go:192","msg":"UpdPwd","username":"test2"}

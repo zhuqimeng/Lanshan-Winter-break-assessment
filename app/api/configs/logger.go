@@ -68,6 +68,6 @@ func NewCustomLogger(logFile string) (*zap.Logger, error) {
 }
 
 func InitLogger() {
-	Logger, _ = NewCustomLogger("ZhiHu.log")
+	Logger, _ = NewCustomLogger("Storage/Log/ZhiHu.log")
 	Sugar = Logger.Sugar()
 }
