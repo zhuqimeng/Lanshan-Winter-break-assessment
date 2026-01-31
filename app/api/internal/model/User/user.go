@@ -4,9 +4,10 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Name      string `json:"name" gorm:"size:64;unique;not null;comment:用户名"`
-	Password  string `json:"password" gorm:"size:128;not null;comment:密码哈希"`
-	AvatarURL string `gorm:"type:varchar(500)"`
+	Name       string `json:"name" gorm:"size:64;unique;not null;comment:用户名"`
+	Password   string `json:"password" gorm:"size:128;not null;comment:密码哈希"`
+	AvatarURL  string `gorm:"type:varchar(500)"`
+	ProfileURL string `gorm:"type:varchar(500)"`
 }
 
 type CreateUserReq struct {

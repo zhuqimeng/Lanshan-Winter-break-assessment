@@ -1,4 +1,4 @@
-package browse
+package User
 
 import (
 	"io"
@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
+	"zhihu/utils/files"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -14,6 +15,7 @@ import (
 
 func GetHome(c *gin.Context) {
 	username := c.Param("username")
+	filename := c.Param("filename")
 	var count int64
 	if err := configs.Db.Model(&User.User{}).Where("name = ?", username).Count(&count).Error; err != nil {
 		configs.Logger.Error("GetHome", zap.Error(err))
@@ -42,11 +44,21 @@ func GetHome(c *gin.Context) {
 		})
 		return
 	}
-	thePath := user.AvatarURL
+	var thePath string
+	if filename == "avatar" {
+		thePath = user.AvatarURL
+	} else if filename == "profile" {
+		thePath = user.ProfileURL
+	} else {
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "不存在的主页信息",
+		})
+		return
+	}
 	fileInfo, err := os.Stat(thePath)
 	if thePath == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"msg": "用户还未上传头像",
+			"msg": "用户还未上传该信息",
 		})
 		return
 	}
@@ -85,6 +97,9 @@ func GetHome(c *gin.Context) {
 	}
 	_, _ = file.Seek(0, 0)
 	contentType := http.DetectContentType(buffer[:n])
+	if files.IsMarkdown(file.Name()) {
+		contentType = "text/markdown; charset=utf-8"
+	}
 	// 检测头像类型
 
 	c.Header("Content-Type", contentType)
@@ -95,7 +110,7 @@ func GetHome(c *gin.Context) {
 
 	_, err = io.Copy(c.Writer, file)
 	if err != nil {
-		configs.Logger.Error("传输图片失败", zap.Error(err))
+		configs.Logger.Error("传输文件失败", zap.Error(err))
 		return
 	}
 }

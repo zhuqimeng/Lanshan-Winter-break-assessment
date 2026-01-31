@@ -3,9 +3,9 @@ package router
 import (
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/middleware/Auth"
+	"zhihu/app/api/internal/service/User"
 	"zhihu/app/api/internal/service/User/Sign"
 	"zhihu/app/api/internal/service/User/Upload"
-	"zhihu/app/api/internal/service/User/browse"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -26,16 +26,16 @@ func Router() {
 	updR.Use(Auth.TokenChecker())
 	{
 		updR.POST("/password", Upload.UpdPwd)
-		updR.POST("/avatar", Upload.AvatarUpd)
+		updR.POST("/homepage/:filetype", Upload.HomeUpd)
+
 	}
 	// 上传文件路由
 
-	getR := r.Group("/browse")
-	getR.Use(Auth.TokenChecker())
+	userR := r.Group("/user")
 	{
-		getR.GET("/homepage/:username", browse.GetHome)
+		userR.GET("/:username/homepage/:filename", User.GetHome)
 	}
-	// 浏览网站路由
+	// 浏览用户路由
 
 	if err := r.Run(":8080"); err != nil {
 		configs.Logger.Fatal("Run error", zap.Error(err))
