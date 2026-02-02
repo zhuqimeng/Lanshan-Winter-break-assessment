@@ -95,7 +95,7 @@ func Create(c *gin.Context) {
 	filename := fmt.Sprintf("%d-%s%s", timestamp, username, ext)
 	var thePath string
 	if filetype == "article" {
-		thePath = fmt.Sprintf("Storage/Document/Article/%s", filename)
+		thePath = fmt.Sprintf("Storage/Document/Answer/%s", filename)
 	} else {
 		thePath = fmt.Sprintf("Storage/Document/Question/%s", filename)
 	}

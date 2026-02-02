@@ -40,6 +40,12 @@ func Router() {
 	}
 	// 浏览用户路由
 
+	broR := r.Group("/browse")
+	{
+		broR.GET("/:filetype/:url", DocumentDao.GetMdFile)
+	}
+	// 浏览网页路由
+
 	if err := r.Run(":8080"); err != nil {
 		configs.Logger.Fatal("Run error", zap.Error(err))
 	}

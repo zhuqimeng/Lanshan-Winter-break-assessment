@@ -60,3 +60,12 @@
 {"level":"INFO","time":"2026-02-02 17:14:27.564","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"zhuqimeng","registered_claims":{"iss":"ZhiHu","sub":"2018228431967227904","aud":["ZhiHu"],"exp":1770025329,"nbf":1770018129,"iat":1770018129,"jti":"2018228431967227904"}}}
 {"level":"INFO","time":"2026-02-02 17:14:59.166","caller":"gin@v1.11.0/context.go:192","msg":"GetQuestions","username":"zhuqimeng"}
 {"level":"INFO","time":"2026-02-02 17:19:38.395","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:00:27.118","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:01:16.666","caller":"gin@v1.11.0/context.go:192","msg":"GetQuestions","username":"zhuqimeng"}
+{"level":"INFO","time":"2026-02-02 18:02:48.746","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:04:20.439","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:09:59.297","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:10:37.010","caller":"gin@v1.11.0/context.go:192","msg":"GetArticles","username":"zhuqimeng"}
+{"level":"INFO","time":"2026-02-02 18:12:29.125","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-02 18:12:59.240","caller":"gin@v1.11.0/context.go:192","msg":"GetArticles","username":"zhuqimeng"}
+{"level":"INFO","time":"2026-02-02 18:13:06.259","caller":"gin@v1.11.0/context.go:192","msg":"GetQuestions","username":"zhuqimeng"}

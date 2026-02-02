@@ -4,7 +4,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
 	"zhihu/utils/files"
@@ -56,14 +55,8 @@ func GetHome(c *gin.Context) {
 		return
 	}
 	fileInfo, err := os.Stat(thePath)
-	if thePath == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "用户还未上传该信息",
-		})
-		return
-	}
-	if _, err := os.Stat(thePath); os.IsNotExist(err) {
-		configs.Logger.Error("GetHome", zap.Error(res.Error))
+	if os.IsNotExist(err) {
+		configs.Logger.Error("GetHome", zap.Error(err))
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": err.Error(),
 		})
@@ -101,13 +94,7 @@ func GetHome(c *gin.Context) {
 		contentType = "text/markdown; charset=utf-8"
 	}
 	// 检测头像类型
-
-	c.Header("Content-Type", contentType)
-	c.Header("Content-Length", strconv.FormatInt(fileInfo.Size(), 10))
-	c.Header("Cache-Control", "public, max-age=3600")
-	c.Header("Last-Modified", fileInfo.ModTime().UTC().Format(http.TimeFormat))
-	// 设置请求头
-
+	files.HeaderSet(c, fileInfo, contentType)
 	_, err = io.Copy(c.Writer, file)
 	if err != nil {
 		configs.Logger.Error("传输文件失败", zap.Error(err))
