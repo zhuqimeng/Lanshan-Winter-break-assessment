@@ -3,6 +3,7 @@ package router
 import (
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/middleware/Auth"
+	DocumentDao "zhihu/app/api/internal/service/Document/dao"
 	"zhihu/app/api/internal/service/User"
 	"zhihu/app/api/internal/service/User/Sign"
 	"zhihu/app/api/internal/service/User/Upload"
@@ -14,7 +15,7 @@ import (
 func Router() {
 	r := gin.Default()
 	r.MaxMultipartMemory = 10 << 20
-	r.GET("/ping", Auth.TokenChecker(), pong)
+	r.GET("/ping", pong)
 	r.GET("/refresh", refresh)
 	// 基本响应和token刷新
 
@@ -27,13 +28,15 @@ func Router() {
 	{
 		updR.POST("/password", Upload.UpdPwd)
 		updR.POST("/homepage/:filetype", Upload.HomeUpd)
-
+		updR.POST("/new/:filetype", DocumentDao.Create)
 	}
 	// 上传文件路由
 
 	userR := r.Group("/user")
 	{
 		userR.GET("/:username/homepage/:filename", User.GetHome)
+		userR.GET("/:username/articles", DocumentDao.GetUserArticles)
+		userR.GET("/:username/questions", DocumentDao.GetUserQuestions)
 	}
 	// 浏览用户路由
 

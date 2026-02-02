@@ -1,9 +1,12 @@
 package Document
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Article struct {
 	gorm.Model
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Title    string `json:"title" gorm:"size:255;not null"`
+	Username string `json:"username" gorm:"size:255;not null"`
+	URL      string `json:"url" gorm:"size:255;unique"`
 }

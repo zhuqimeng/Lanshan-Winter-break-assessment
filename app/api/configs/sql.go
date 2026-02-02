@@ -3,6 +3,7 @@ package configs
 import (
 	"fmt"
 	"os"
+	"zhihu/app/api/internal/model/Document"
 	"zhihu/app/api/internal/model/User"
 
 	"github.com/spf13/viper"
@@ -66,7 +67,7 @@ func InitDB() error {
 		Logger.Fatal("InitDb", zap.Error(err))
 		return err
 	}
-	err = Db.AutoMigrate(&User.User{})
+	err = Db.AutoMigrate(&User.User{}, &Document.Article{}, &Document.Question{})
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 		return err
