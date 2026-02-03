@@ -13,15 +13,15 @@ func checkQuestion(c *gin.Context, link string) bool {
 	var count int64
 	if err := configs.Db.Model(&Document.Question{}).Where("url = ?", link).Count(&count).Error; err != nil {
 		configs.Logger.Error("AnsRead", zap.Error(err))
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code": http.StatusInternalServerError,
 			"msg":  "服务器故障",
 		})
 		return false
 	}
 	if count == 0 {
-		c.JSON(http.StatusBadGateway, gin.H{
-			"code": http.StatusBadGateway,
+		c.JSON(http.StatusNotFound, gin.H{
+			"code": http.StatusNotFound,
 			"msg":  "该问题不存在或已被删除",
 		})
 		return false
@@ -60,7 +60,7 @@ func Read(c *gin.Context) {
 	for _, answer := range answers {
 		result = append(result, gin.H{
 			"url":       answer.URL,
-			"id":        answer.ID,
+			"username":  answer.Username,
 			"createdAt": answer.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}

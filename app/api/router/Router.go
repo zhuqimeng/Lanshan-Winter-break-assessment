@@ -5,6 +5,7 @@ import (
 	"zhihu/app/api/internal/middleware/Auth"
 	"zhihu/app/api/internal/middleware/Auto"
 	"zhihu/app/api/internal/service/Document/Answer"
+	"zhihu/app/api/internal/service/Document/Comment"
 	DocumentDao "zhihu/app/api/internal/service/Document/dao"
 	"zhihu/app/api/internal/service/User"
 	"zhihu/app/api/internal/service/User/Sign"
@@ -41,16 +42,17 @@ func Router() {
 		userR.GET("articles", Auto.RouterSet("article"), DocumentDao.GetUserInfo)
 		userR.GET("questions", Auto.RouterSet("question"), DocumentDao.GetUserInfo)
 		userR.GET("answers", Auto.RouterSet("answer"), DocumentDao.GetUserInfo)
+		userR.GET("comments", Auto.RouterSet("comment"), DocumentDao.GetUserInfo)
 	}
 	// 浏览用户路由
 
 	broR := r.Group("/browse/:filetype/:url")
 	{
 		broR.GET("", DocumentDao.GetMdFile)
-		broR.GET("comment")
-		broR.GET("comment/create", Auth.TokenChecker())
+		broR.GET("comment", Comment.Read)
+		broR.POST("comment/create", Auth.TokenChecker(), Comment.Create)
 		broR.GET("answer", Answer.Read)
-		broR.GET("answer/create", Auth.TokenChecker(), Answer.Create)
+		broR.POST("answer/create", Auth.TokenChecker(), Answer.Create)
 	}
 	// 浏览网页路由
 

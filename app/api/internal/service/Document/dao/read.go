@@ -128,6 +128,36 @@ func GetUserInfo(c *gin.Context) {
 			"total":   len(answers),
 			"answers": response,
 		})
+	case "comment":
+		var comments []Document.Comment
+		result := configs.Db.Model(&Document.Comment{}).Where("username = ?", username).Order("created_at DESC").Find(&comments)
+		if result.Error != nil {
+			configs.Logger.Error("GetUserInfo", zap.Error(result.Error))
+			c.JSON(http.StatusBadRequest, gin.H{
+				"code": http.StatusBadRequest,
+				"msg":  result.Error.Error(),
+			})
+			return
+		}
+		if len(comments) == 0 {
+			c.JSON(http.StatusOK, gin.H{
+				"msg": "该用户还未发布过评论",
+			})
+			return
+		}
+		for _, comment := range comments {
+			response = append(response, gin.H{
+				"id":        comment.ID,
+				"link":      comment.Link,
+				"content":   comment.Content,
+				"createdAt": comment.CreatedAt.Format("2006-01-02 15:04:05"),
+			})
+		}
+		configs.Logger.Info("GetUserInfo", zap.String("username", username))
+		c.JSON(http.StatusOK, gin.H{
+			"total":    len(comments),
+			"comments": response,
+		})
 	default:
 		c.JSON(http.StatusNotFound, gin.H{
 			"code": http.StatusNotFound,
