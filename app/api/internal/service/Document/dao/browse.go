@@ -18,6 +18,8 @@ func GetMdFile(c *gin.Context) {
 		thePath = "Storage/Document/Article/" + thePath
 	} else if filetype == "question" {
 		thePath = "Storage/Document/Question/" + thePath
+	} else if filetype == "answer" {
+		thePath = "Storage/Document/Answer/" + thePath
 	} else {
 		c.JSON(http.StatusNotFound, gin.H{
 			"code": http.StatusNotFound,
@@ -57,7 +59,7 @@ func GetMdFile(c *gin.Context) {
 	files.HeaderSet(c, fileInfo, contentType)
 	_, err = io.Copy(c.Writer, file)
 	if err != nil {
-		configs.Logger.Error("传输文件失败", zap.Error(err))
+		configs.Logger.Error("传输文件失败", zap.Error(err), zap.String("file", thePath))
 		return
 	}
 }

@@ -57,9 +57,15 @@ func GetHome(c *gin.Context) {
 	fileInfo, err := os.Stat(thePath)
 	if os.IsNotExist(err) {
 		configs.Logger.Error("GetHome", zap.Error(err))
-		c.JSON(http.StatusNotFound, gin.H{
-			"msg": err.Error(),
-		})
+		if filename == "avatar" {
+			c.JSON(http.StatusNotFound, gin.H{
+				"msg": "用户还未上传头像",
+			})
+		} else {
+			c.JSON(http.StatusNotFound, gin.H{
+				"msg": "用户还未编写个人主页",
+			})
+		}
 		return
 	}
 	// 验证头像是否存在

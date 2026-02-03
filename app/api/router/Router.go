@@ -3,6 +3,8 @@ package router
 import (
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/middleware/Auth"
+	"zhihu/app/api/internal/middleware/Auto"
+	"zhihu/app/api/internal/service/Document/Answer"
 	DocumentDao "zhihu/app/api/internal/service/Document/dao"
 	"zhihu/app/api/internal/service/User"
 	"zhihu/app/api/internal/service/User/Sign"
@@ -15,6 +17,7 @@ import (
 func Router() {
 	r := gin.Default()
 	r.MaxMultipartMemory = 10 << 20
+	r.GET("", react)
 	r.GET("/ping", pong)
 	r.GET("/refresh", refresh)
 	// 基本响应和token刷新
@@ -32,17 +35,22 @@ func Router() {
 	}
 	// 上传文件路由
 
-	userR := r.Group("/user")
+	userR := r.Group("/user/:username")
 	{
-		userR.GET("/:username/homepage/:filename", User.GetHome)
-		userR.GET("/:username/articles", DocumentDao.GetUserArticles)
-		userR.GET("/:username/questions", DocumentDao.GetUserQuestions)
+		userR.GET("homepage/:filename", User.GetHome)
+		userR.GET("articles", Auto.RouterSet("article"), DocumentDao.GetUserInfo)
+		userR.GET("questions", Auto.RouterSet("question"), DocumentDao.GetUserInfo)
+		userR.GET("answers", Auto.RouterSet("answer"), DocumentDao.GetUserInfo)
 	}
 	// 浏览用户路由
 
-	broR := r.Group("/browse")
+	broR := r.Group("/browse/:filetype/:url")
 	{
-		broR.GET("/:filetype/:url", DocumentDao.GetMdFile)
+		broR.GET("", DocumentDao.GetMdFile)
+		broR.GET("comment")
+		broR.GET("comment/create", Auth.TokenChecker())
+		broR.GET("answer", Answer.Read)
+		broR.GET("answer/create", Auth.TokenChecker(), Answer.Create)
 	}
 	// 浏览网页路由
 

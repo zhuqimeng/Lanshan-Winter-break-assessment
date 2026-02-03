@@ -95,7 +95,7 @@ func Create(c *gin.Context) {
 	filename := fmt.Sprintf("%d-%s%s", timestamp, username, ext)
 	var thePath string
 	if filetype == "article" {
-		thePath = fmt.Sprintf("Storage/Document/Answer/%s", filename)
+		thePath = fmt.Sprintf("Storage/Document/Article/%s", filename)
 	} else {
 		thePath = fmt.Sprintf("Storage/Document/Question/%s", filename)
 	}
@@ -113,7 +113,7 @@ func Create(c *gin.Context) {
 		article := &Document.Article{
 			Username: username,
 			Title:    file.Filename,
-			URL:      thePath,
+			URL:      "/browse/article/" + filename,
 		}
 		result := configs.Db.Create(article)
 		if result.Error != nil {
@@ -138,7 +138,7 @@ func Create(c *gin.Context) {
 		question := &Document.Question{
 			Username: username,
 			Title:    file.Filename,
-			URL:      thePath,
+			URL:      "/browse/question/" + filename,
 		}
 		result := configs.Db.Create(question)
 		if result.Error != nil {
