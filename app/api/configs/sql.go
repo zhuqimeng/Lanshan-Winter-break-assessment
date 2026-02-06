@@ -56,21 +56,17 @@ func (c *DBConfig) DSN() string {
 		c.Username, c.Password, c.Host, c.Port, c.DBName)
 }
 
-func InitDB() error {
+func InitDB() {
 	MyDbConfig, err := LoadDBConfig()
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
-		return err
 	}
 	Db, err = gorm.Open(mysql.Open(MyDbConfig.DSN()), &gorm.Config{})
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
-		return err
 	}
 	err = Db.AutoMigrate(&User.User{}, &Document.Article{}, &Document.Question{}, &Document.Answer{}, &Document.Comment{})
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
-		return err
 	}
-	return nil
 }

@@ -2,6 +2,12 @@
 
 做一个类似 Quora/zhihu 的在线问答/发帖社区项目。
 
+### 接口文档
+
+使用 postman 调试接口，可访问网页版在线文档。
+
+[Link](https://zhuqimeng-4383979.postman.co/workspace/frog's-Workspace~89de5974-f978-4fdc-8d83-c1ae9bdfc668/collection/49204767-9aa78575-a604-4ffc-97b1-fd507c030477?action=share&creator=49204767)
+
 ### 基本要求
 
 1. 基本的用户系统（已完成）
@@ -12,7 +18,7 @@
    5. 用户个人信息的修改
 2. 发布文章、问题；以及能够进行问题的回答、文章的评论。
    1. 发布/删除/更新/获取文章、问题（可以只做一个）
-   2. 文章格式建议规范为markdown，且文章可以插入图片
+   2. 文章格式建议规范为markdown，且文章可以插入图片（只能插入markdown格式的图片链接）
    3. 能够对文章、问题进行回复/评论
    4. （**非必要**）对问题进行关注、可以对文章、问题回答进行点赞和收藏。
    5. （**非必要**）按照问题热度进行排序，做一个热度榜
@@ -61,3 +67,103 @@
 Mysql 的全文索引：https://juejin.cn/post/7524910653062463528
 
 怎么调大模型：https://www.cloudwego.io/zh/docs/eino/overview/
+
+### 项目架构
+
+```
+LanshanWinterProject
+├─ .idea
+│  ├─ dictionaries
+│  │  └─ project.xml
+│  ├─ LanshanWinterProject.iml
+│  ├─ modules.xml
+│  ├─ vcs.xml
+│  └─ workspace.xml
+├─ app
+│  └─ api
+│     ├─ configs
+│     │  ├─ config.yaml
+│     │  ├─ logger.go
+│     │  └─ sql.go
+│     ├─ internal
+│     │  ├─ middleware
+│     │  │  └─ Auth
+│     │  │     ├─ AuthStatu.go
+│     │  │     ├─ AuthUser.go
+│     │  │     └─ AuthVip.go
+│     │  ├─ model
+│     │  │  ├─ Document
+│     │  │  │  ├─ answer.go
+│     │  │  │  ├─ article.go
+│     │  │  │  ├─ comment.go
+│     │  │  │  └─ question.go
+│     │  │  └─ User
+│     │  │     └─ user.go
+│     │  └─ service
+│     │     ├─ Document
+│     │     │  ├─ Answer
+│     │     │  │  ├─ create.go
+│     │     │  │  └─ read.go
+│     │     │  ├─ Comment
+│     │     │  │  ├─ create.go
+│     │     │  │  └─ read.go
+│     │     │  └─ dao
+│     │     │     ├─ browse.go
+│     │     │     ├─ create.go
+│     │     │     └─ read.go
+│     │     ├─ Serach
+│     │     │  ├─ SerachArticle
+│     │     │  ├─ SerachQuestion
+│     │     │  └─ SerachUser
+│     │     └─ User
+│     │        ├─ Admin
+│     │        ├─ dao
+│     │        │  ├─ CreateUser.go
+│     │        │  └─ ReadUser.go
+│     │        ├─ Follow
+│     │        │  ├─ followers
+│     │        │  └─ following
+│     │        ├─ homepage.go
+│     │        ├─ Sign
+│     │        │  ├─ SignIn.go
+│     │        │  └─ SignUp.go
+│     │        └─ Upload
+│     │           ├─ Homepage.go
+│     │           └─ PasswordChange.go
+│     └─ router
+│        ├─ react.go
+│        ├─ refresh.go
+│        └─ Router.go
+├─ go.mod
+├─ go.sum
+├─ main.go
+├─ README.md
+├─ Storage
+│  ├─ Document
+│  │  ├─ Answer
+│  │  │  └─ 1770377843667167300-test2.md
+│  │  ├─ Article
+│  │  │  └─ 1770370796889802200-test1.md
+│  │  └─ Question
+│  │     └─ 1770372183202854000-test1.md
+│  ├─ Log
+│  │  └─ ZhiHu.log
+│  └─ User
+│     ├─ Avatar
+│     │  └─ test1_1770370243591934400.png
+│     └─ Profile
+│        └─ test1_1770370513029485900.md
+└─ utils
+   ├─ files
+   │  ├─ detectType.go
+   │  └─ headerSet.go
+   ├─ randoms
+   │  └─ genSalt.go
+   ├─ strings
+   │  └─ Hash.go
+   └─ tokens
+      ├─ create.go
+      ├─ model.go
+      └─ read.go
+
+```

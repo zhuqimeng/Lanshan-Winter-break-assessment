@@ -10,6 +10,10 @@ import (
 	"go.uber.org/zap"
 )
 
+type Infos interface {
+	Print() gin.H
+}
+
 func CheckUser(c *gin.Context, username string) bool {
 	var count int64
 	if err := configs.Db.Model(&User.User{}).Where("name = ?", username).Count(&count).Error; err != nil {
@@ -30,138 +34,86 @@ func CheckUser(c *gin.Context, username string) bool {
 	return true
 }
 
+func foundError(c *gin.Context, err error) {
+	configs.Logger.Error("GetUserInfo", zap.Error(err))
+	c.JSON(http.StatusBadRequest, gin.H{
+		"code": http.StatusBadRequest,
+		"msg":  err.Error(),
+	})
+}
+
 func GetUserInfo(c *gin.Context) {
 	username := c.Param("username")
 	if !CheckUser(c, username) {
 		return
 	}
-	filetype := c.GetString("filetype")
-	var response []gin.H
+	filetype := c.Query("filetype")
+	var file []Infos
 	switch filetype {
 	case "article":
 		var articles []Document.Article
 		result := configs.Db.Model(&Document.Article{}).Where("username = ?", username).Order("created_at DESC").Find(&articles)
 		if result.Error != nil {
-			configs.Logger.Error("GetUserInfo", zap.Error(result.Error))
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code": http.StatusBadRequest,
-				"msg":  result.Error.Error(),
-			})
+			foundError(c, result.Error)
 			return
 		}
-		if len(articles) == 0 {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "该用户还未发布过文章",
-			})
-			return
+		file = make([]Infos, len(articles))
+		for i, article := range articles {
+			file[i] = article
 		}
-		for _, article := range articles {
-			response = append(response, gin.H{
-				"id":        article.ID,
-				"title":     article.Title,
-				"url":       article.URL,
-				"createdAt": article.CreatedAt.Format("2006-01-02 15:04:05"),
-			})
-		}
-		configs.Logger.Info("GetUserInfo", zap.String("username", username))
-		c.JSON(http.StatusOK, gin.H{
-			"total":    len(articles),
-			"articles": response,
-		})
 	case "question":
 		var questions []Document.Question
 		result := configs.Db.Model(&Document.Question{}).Where("username = ?", username).Order("created_at DESC").Find(&questions)
 		if result.Error != nil {
-			configs.Logger.Error("GetUserInfo", zap.Error(result.Error))
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code": http.StatusBadRequest,
-				"msg":  result.Error.Error(),
-			})
+			foundError(c, result.Error)
 			return
 		}
-		if len(questions) == 0 {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "该用户还未提过问题",
-			})
-			return
+		file = make([]Infos, len(questions))
+		for i, question := range questions {
+			file[i] = question
 		}
-		for _, question := range questions {
-			response = append(response, gin.H{
-				"id":        question.ID,
-				"title":     question.Title,
-				"url":       question.URL,
-				"createdAt": question.CreatedAt.Format("2006-01-02 15:04:05"),
-			})
-		}
-		configs.Logger.Info("GetUserInfo", zap.String("username", username))
-		c.JSON(http.StatusOK, gin.H{
-			"total":     len(questions),
-			"questions": response,
-		})
 	case "answer":
 		var answers []Document.Answer
 		result := configs.Db.Model(&Document.Answer{}).Where("username = ?", username).Order("created_at DESC").Find(&answers)
 		if result.Error != nil {
-			configs.Logger.Error("GetUserInfo", zap.Error(result.Error))
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code": http.StatusBadRequest,
-				"msg":  result.Error.Error(),
-			})
+			foundError(c, result.Error)
 			return
 		}
-		if len(answers) == 0 {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "该用户还未做过回答",
-			})
-			return
+		file = make([]Infos, len(answers))
+		for i, answer := range answers {
+			file[i] = answer
 		}
-		for _, answer := range answers {
-			response = append(response, gin.H{
-				"id":           answer.ID,
-				"question_url": answer.Link,
-				"answer_url":   answer.URL,
-				"createdAt":    answer.CreatedAt.Format("2006-01-02 15:04:05"),
-			})
-		}
-		configs.Logger.Info("GetUserInfo", zap.String("username", username))
-		c.JSON(http.StatusOK, gin.H{
-			"total":   len(answers),
-			"answers": response,
-		})
 	case "comment":
 		var comments []Document.Comment
 		result := configs.Db.Model(&Document.Comment{}).Where("username = ?", username).Order("created_at DESC").Find(&comments)
 		if result.Error != nil {
-			configs.Logger.Error("GetUserInfo", zap.Error(result.Error))
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code": http.StatusBadRequest,
-				"msg":  result.Error.Error(),
-			})
+			foundError(c, result.Error)
 			return
 		}
-		if len(comments) == 0 {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "该用户还未发布过评论",
-			})
-			return
+		file = make([]Infos, len(comments))
+		for i, comment := range comments {
+			file[i] = comment
 		}
-		for _, comment := range comments {
-			response = append(response, gin.H{
-				"id":        comment.ID,
-				"link":      comment.Link,
-				"content":   comment.Content,
-				"createdAt": comment.CreatedAt.Format("2006-01-02 15:04:05"),
-			})
-		}
-		configs.Logger.Info("GetUserInfo", zap.String("username", username))
-		c.JSON(http.StatusOK, gin.H{
-			"total":    len(comments),
-			"comments": response,
-		})
 	default:
 		c.JSON(http.StatusNotFound, gin.H{
 			"code": http.StatusNotFound,
 			"msg":  "不存在的页面",
 		})
+		return
 	}
+	if len(file) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "这里空空如也哦~~",
+		})
+		return
+	}
+	var response []gin.H
+	for _, v := range file {
+		response = append(response, v.Print())
+	}
+	configs.Logger.Info("GetUserInfo", zap.String("username", username))
+	c.JSON(http.StatusOK, gin.H{
+		"total": len(file),
+		"data":  response,
+	})
 }

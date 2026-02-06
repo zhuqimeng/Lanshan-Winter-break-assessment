@@ -42,7 +42,7 @@ func Read(c *gin.Context) {
 		return
 	}
 	var answers []Document.Answer
-	if err := configs.Db.Model(&Document.Answer{}).Where("link = ?", link).Order("created_at DESC").Find(&answers).Error; err != nil {
+	if err := configs.Db.Model(&Document.Answer{}).Where("link = ?", link).Order("like_num DESC").Find(&answers).Error; err != nil {
 		configs.Logger.Error("AnsRead", zap.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": http.StatusBadRequest,
@@ -59,6 +59,7 @@ func Read(c *gin.Context) {
 	var result []gin.H
 	for _, answer := range answers {
 		result = append(result, gin.H{
+			"like_num":  answer.LikeNum,
 			"url":       answer.URL,
 			"username":  answer.Username,
 			"createdAt": answer.CreatedAt.Format("2006-01-02 15:04:05"),

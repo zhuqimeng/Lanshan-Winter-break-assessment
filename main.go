@@ -14,9 +14,7 @@ func main() {
 			fmt.Println(err)
 		}
 	}()
-	if err := configs.InitDB(); err != nil {
-		configs.Sugar.Errorf("init db err:%v", err)
-	}
+	configs.InitDB()
 	configs.Sugar.Info("init success")
 	router.Router()
 }

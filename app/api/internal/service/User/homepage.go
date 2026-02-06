@@ -14,7 +14,7 @@ import (
 
 func GetHome(c *gin.Context) {
 	username := c.Param("username")
-	filename := c.Param("filename")
+	filename := c.Query("filetype")
 	var count int64
 	if err := configs.Db.Model(&User.User{}).Where("name = ?", username).Count(&count).Error; err != nil {
 		configs.Logger.Error("GetHome", zap.Error(err))
