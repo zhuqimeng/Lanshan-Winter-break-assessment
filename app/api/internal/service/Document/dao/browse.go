@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"zhihu/app/api/configs"
+	"zhihu/app/api/internal/model/Document"
 	"zhihu/utils/files"
 
 	"github.com/gin-gonic/gin"
@@ -62,4 +63,39 @@ func GetMdFile(c *gin.Context) {
 		configs.Logger.Error("传输文件失败", zap.Error(err), zap.String("file", thePath))
 		return
 	}
+}
+
+func GetTop(c *gin.Context) {
+	var (
+		questions []Document.Question
+		result    []gin.H
+		orderBy   string
+	)
+	sortBy := c.Query("OrderBy")
+	if sortBy == "like" {
+		orderBy = "like_num DESC"
+	} else if sortBy == "time" {
+		orderBy = "created_at DESC"
+	} else {
+		orderBy = "like_num DESC"
+	}
+	if err := configs.Db.Model(&Document.Question{}).Order(orderBy).Find(&questions).Error; err != nil {
+		configs.Logger.Error("GetTop", zap.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code": http.StatusInternalServerError,
+		})
+		return
+	}
+	for _, q := range questions {
+		result = append(result, gin.H{
+			"author":   q.Username,
+			"title":    q.Title,
+			"url":      q.URL,
+			"like_num": q.LikeNum,
+			"time":     q.CreatedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": result,
+	})
 }

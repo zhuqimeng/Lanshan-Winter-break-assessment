@@ -12,7 +12,7 @@ type Comment struct {
 	Content  string `json:"content" gorm:"type:longtext;not null"`
 }
 
-func (c Comment) Print() gin.H {
+func (c *Comment) Print() gin.H {
 	return gin.H{
 		"id":        c.ID,
 		"link":      c.Link,

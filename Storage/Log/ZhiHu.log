@@ -36,3 +36,18 @@
 {"level":"INFO","time":"2026-02-06 20:02:39.467","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2019743462944935936","aud":["ZhiHu"],"exp":1770386541,"nbf":1770379341,"iat":1770379341,"jti":"2019743462944935936"}}}
 {"level":"INFO","time":"2026-02-06 20:02:39.478","caller":"gin@v1.11.0/context.go:192","msg":"CreateComment","username":"test1"}
 {"level":"INFO","time":"2026-02-06 20:11:00.235","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo","username":"test1"}
+{"level":"INFO","time":"2026-02-07 19:31:42.546","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-07 19:36:13.836","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test1","status":"success"}
+{"level":"INFO","time":"2026-02-07 19:38:30.348","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test1","status":"success"}
+{"level":"INFO","time":"2026-02-07 19:39:52.944","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2020099276633280512","aud":["ZhiHu"],"exp":1770471373,"nbf":1770464173,"iat":1770464173,"jti":"2020099276633280512"}}}
+{"level":"INFO","time":"2026-02-07 19:39:52.962","caller":"dao/like.go:100","msg":"updateLike","user":"test1","url":"/browse/answer/1770377843667167300-test2.md","status":true}
+{"level":"INFO","time":"2026-02-07 19:53:16.960","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2020099276633280512","aud":["ZhiHu"],"exp":1770471373,"nbf":1770464173,"iat":1770464173,"jti":"2020099276633280512"}}}
+{"level":"INFO","time":"2026-02-07 19:54:08.581","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2020099276633280512","aud":["ZhiHu"],"exp":1770471373,"nbf":1770464173,"iat":1770464173,"jti":"2020099276633280512"}}}
+{"level":"INFO","time":"2026-02-07 19:54:08.595","caller":"dao/like.go:102","msg":"updateLike","user":"test1","url":"/browse/answer/1770377843667167300-test2.md","status":false}
+{"level":"INFO","time":"2026-02-07 19:56:16.363","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo","username":"test2"}
+{"level":"INFO","time":"2026-02-07 19:58:25.606","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test2","status":"success"}
+{"level":"INFO","time":"2026-02-07 19:58:55.683","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2020104862481518592","aud":["ZhiHu"],"exp":1770472705,"nbf":1770465505,"iat":1770465505,"jti":"2020104862481518592"}}}
+{"level":"INFO","time":"2026-02-07 19:58:55.699","caller":"dao/like.go:100","msg":"updateLike","user":"test2","url":"/browse/question/1770372183202854000-test1.md","status":true}
+{"level":"INFO","time":"2026-02-07 19:59:16.342","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo","username":"test2"}
+{"level":"INFO","time":"2026-02-07 19:59:38.772","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo","username":"test1"}
+{"level":"INFO","time":"2026-02-07 20:16:26.489","caller":"runtime/proc.go:285","msg":"init success"}

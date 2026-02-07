@@ -18,7 +18,7 @@ func Router() {
 	r := gin.Default()
 	r.MaxMultipartMemory = 10 << 20
 	r.GET("", react)
-	r.GET("/top")
+	r.GET("/top", DocumentDao.GetTop)
 	// 默认主页
 
 	r.GET("/ping", pong)
@@ -55,9 +55,8 @@ func Router() {
 	}
 	// 浏览文件路由
 
-	r.PUT("/like/:filetype")
-	r.DELETE("/unlike/:filetype")
-	// 点赞与取消
+	r.PUT("/like/:filetype/:url", Auth.TokenChecker(), DocumentDao.ChangeLike)
+	// 功能按键
 
 	if err := r.Run(":8080"); err != nil {
 		configs.Logger.Fatal("Run error", zap.Error(err))

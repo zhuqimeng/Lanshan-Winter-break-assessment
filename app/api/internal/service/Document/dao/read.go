@@ -59,7 +59,7 @@ func GetUserInfo(c *gin.Context) {
 		}
 		file = make([]Infos, len(articles))
 		for i, article := range articles {
-			file[i] = article
+			file[i] = &article
 		}
 	case "question":
 		var questions []Document.Question
@@ -70,7 +70,7 @@ func GetUserInfo(c *gin.Context) {
 		}
 		file = make([]Infos, len(questions))
 		for i, question := range questions {
-			file[i] = question
+			file[i] = &question
 		}
 	case "answer":
 		var answers []Document.Answer
@@ -81,7 +81,7 @@ func GetUserInfo(c *gin.Context) {
 		}
 		file = make([]Infos, len(answers))
 		for i, answer := range answers {
-			file[i] = answer
+			file[i] = &answer
 		}
 	case "comment":
 		var comments []Document.Comment
@@ -92,7 +92,7 @@ func GetUserInfo(c *gin.Context) {
 		}
 		file = make([]Infos, len(comments))
 		for i, comment := range comments {
-			file[i] = comment
+			file[i] = &comment
 		}
 	default:
 		c.JSON(http.StatusNotFound, gin.H{

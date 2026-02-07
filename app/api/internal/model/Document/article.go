@@ -13,7 +13,15 @@ type Article struct {
 	LikeNum  int    `json:"like_num" gorm:"default:0"`
 }
 
-func (a Article) Print() gin.H {
+func (a *Article) UpdLike(op bool) {
+	if op {
+		a.LikeNum++
+	} else {
+		a.LikeNum--
+	}
+}
+
+func (a *Article) Print() gin.H {
 	return gin.H{
 		"id":        a.ID,
 		"title":     a.Title,
