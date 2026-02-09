@@ -49,13 +49,13 @@ func Router() {
 	{
 		broR.GET("", DocumentDao.GetMdFile)
 		broR.GET("comment", Comment.Read)
-		broR.POST("comment/create", Auth.TokenChecker(), Comment.Create)
+		broR.POST("comment/create", Auth.TokenChecker(), Auth.FrequencyChecker("comment"), Comment.Create)
 		broR.GET("answer", Answer.Read)
 		broR.POST("answer/create", Auth.TokenChecker(), Answer.Create)
 	}
 	// 浏览文件路由
 
-	r.PUT("/like/:filetype/:url", Auth.TokenChecker(), DocumentDao.ChangeLike)
+	r.PUT("/like/:filetype/:url", Auth.TokenChecker(), Auth.FrequencyChecker("like"), DocumentDao.ChangeLike)
 	// 功能按键
 
 	if err := r.Run(":8080"); err != nil {

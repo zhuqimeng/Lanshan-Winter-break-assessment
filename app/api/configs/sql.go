@@ -6,13 +6,17 @@ import (
 	"zhihu/app/api/internal/model/Document"
 	"zhihu/app/api/internal/model/User"
 
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var Db *gorm.DB
+var (
+	Db  *gorm.DB
+	Cli *redis.Client
+)
 
 type DBConfig struct {
 	Host     string `mapstructure:"host"`
@@ -69,4 +73,7 @@ func InitDB() {
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 	}
+	Cli = redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
 }
