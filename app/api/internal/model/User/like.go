@@ -1,4 +1,4 @@
-package Document
+package User
 
 import "gorm.io/gorm"
 

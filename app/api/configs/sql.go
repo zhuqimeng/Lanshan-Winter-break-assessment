@@ -69,7 +69,8 @@ func InitDB() {
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 	}
-	err = Db.AutoMigrate(&User.User{}, &Document.Article{}, &Document.Question{}, &Document.Answer{}, &Document.Comment{}, &Document.LikeUrlUser{})
+	err = Db.AutoMigrate(&User.User{}, &User.LikeUrlUser{}, &User.Relation{}, &User.FeedItem{},
+		&Document.Article{}, &Document.Question{}, &Document.Answer{}, &Document.Comment{})
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 	}

@@ -7,6 +7,7 @@ import (
 	"zhihu/app/api/internal/service/Document/Comment"
 	DocumentDao "zhihu/app/api/internal/service/Document/dao"
 	"zhihu/app/api/internal/service/User"
+	"zhihu/app/api/internal/service/User/Follow"
 	"zhihu/app/api/internal/service/User/Sign"
 	"zhihu/app/api/internal/service/User/Upload"
 
@@ -42,6 +43,8 @@ func Router() {
 	{
 		userR.GET("", DocumentDao.GetUserInfo)
 		userR.GET("homepage", User.GetHome)
+		userR.GET("following", Follow.GetFollowing)
+		userR.GET("follower", Follow.GetFollower)
 	}
 	// 浏览用户路由
 
@@ -56,6 +59,8 @@ func Router() {
 	// 浏览文件路由
 
 	r.PUT("/like/:filetype/:url", Auth.TokenChecker(), Auth.FrequencyChecker("like"), DocumentDao.ChangeLike)
+	r.PUT("/follow/:username", Auth.TokenChecker(), Auth.FrequencyChecker("follow"), Follow.OnFollow)
+	r.PUT("/unfollow/:username", Auth.TokenChecker(), Auth.FrequencyChecker("follow"), Follow.OffFollow)
 	// 功能按键
 
 	if err := r.Run(":8080"); err != nil {

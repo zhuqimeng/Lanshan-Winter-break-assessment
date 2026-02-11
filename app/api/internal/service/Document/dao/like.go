@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/Document"
+	"zhihu/app/api/internal/model/User"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -17,7 +18,7 @@ type likeFile interface {
 
 func updateLike(username, url, filetype string, status bool) error {
 	var (
-		likeReq Document.LikeUrlUser
+		likeReq User.LikeUrlUser
 		file    likeFile
 	)
 	switch filetype {
@@ -54,10 +55,10 @@ func updateLike(username, url, filetype string, status bool) error {
 	default:
 		return errors.New("不存在的 URL")
 	}
-	if err := configs.Db.Model(&Document.LikeUrlUser{}).Where("username = ? AND url = ?", username, url).First(&likeReq).Error; err != nil {
+	if err := configs.Db.Model(&User.LikeUrlUser{}).Where("username = ? AND url = ?", username, url).First(&likeReq).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			if status {
-				likeReq = Document.LikeUrlUser{
+				likeReq = User.LikeUrlUser{
 					Username: username,
 					Url:      url,
 					Status:   false,
