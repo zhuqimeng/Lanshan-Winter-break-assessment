@@ -6,7 +6,6 @@ import (
 	"time"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
-	"zhihu/app/api/internal/service/Document/dao"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -21,6 +20,14 @@ func checkFollow(username, follower string) (error, bool) {
 	return nil, count > 0
 }
 
+func checkUser(username string) (error, bool) {
+	var count int64
+	if err := configs.Db.Model(&User.User{}).Where("name = ?", username).Count(&count).Error; err != nil {
+		return err, false
+	}
+	return nil, count > 0
+}
+
 func OnFollow(c *gin.Context) {
 	follower := c.GetString("username")
 	username := c.Param("username")
@@ -30,8 +37,21 @@ func OnFollow(c *gin.Context) {
 		})
 		return
 	}
-	dao.CheckUser(c, follower)
-	err, ok := checkFollow(username, follower)
+	err, ok := checkUser(username)
+	if err != nil {
+		configs.Logger.Error("OnFollow err", zap.String("username", username), zap.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": err.Error(),
+		})
+		return
+	}
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "该用户不存在或已被封禁。",
+		})
+		return
+	}
+	err, ok = checkFollow(username, follower)
 	if err != nil {
 		configs.Logger.Error("OnFollow CheckFollow err", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -63,6 +83,7 @@ func OnFollow(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
 				"msg": "关注成功。",
 			})
+			go pushFeedAToB(username, follower)
 			return
 			// 首次关注
 		}
@@ -94,8 +115,21 @@ func OffFollow(c *gin.Context) {
 		})
 		return
 	}
-	dao.CheckUser(c, follower)
-	err, ok := checkFollow(username, follower)
+	err, ok := checkUser(username)
+	if err != nil {
+		configs.Logger.Error("OffFollow err", zap.String("username", username), zap.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": err.Error(),
+		})
+		return
+	}
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "该用户不存在或已被封禁。",
+		})
+		return
+	}
+	err, ok = checkFollow(username, follower)
 	if err != nil {
 		configs.Logger.Error("OffFollow CheckFollow err", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{

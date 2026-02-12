@@ -14,7 +14,7 @@ type Infos interface {
 	Print() gin.H
 }
 
-func CheckUser(c *gin.Context, username string) bool {
+func checkUser(c *gin.Context, username string) bool {
 	var count int64
 	if err := configs.Db.Model(&User.User{}).Where("name = ?", username).Count(&count).Error; err != nil {
 		configs.Logger.Error("CheckUser", zap.Error(err))
@@ -44,7 +44,7 @@ func foundError(c *gin.Context, err error) {
 
 func GetUserInfo(c *gin.Context) {
 	username := c.Param("username")
-	if !CheckUser(c, username) {
+	if !checkUser(c, username) {
 		return
 	}
 	filetype := c.Query("filetype")

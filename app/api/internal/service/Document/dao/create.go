@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"encoding/json"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 	"time"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/Document"
+	"zhihu/app/api/internal/service/User/Follow"
 	"zhihu/utils/files"
 
 	"github.com/gabriel-vasile/mimetype"
@@ -61,7 +63,7 @@ func Create(c *gin.Context) {
 		return
 	}
 	defer func() {
-		if err := fileHeader.Close(); err != nil {
+		if err = fileHeader.Close(); err != nil {
 			configs.Sugar.Error("DocUpd", "文件关闭失败", err)
 		}
 	}()
@@ -99,7 +101,7 @@ func Create(c *gin.Context) {
 	} else {
 		thePath = fmt.Sprintf("Storage/Document/Question/%s", filename)
 	}
-	if err := c.SaveUploadedFile(file, thePath); err != nil {
+	if err = c.SaveUploadedFile(file, thePath); err != nil {
 		configs.Logger.Error("DocUpd", zap.Any("username", username), zap.Error(err))
 		c.JSON(http.StatusBadGateway, gin.H{
 			"code": http.StatusBadGateway,
@@ -134,6 +136,8 @@ func Create(c *gin.Context) {
 				"created_at": article.CreatedAt,
 			},
 		})
+		content, _ := json.Marshal(article)
+		go Follow.AddFeedToFollower(username, string(content))
 	} else {
 		question := &Document.Question{
 			Username: username,
@@ -159,5 +163,7 @@ func Create(c *gin.Context) {
 				"created_at": question.CreatedAt,
 			},
 		})
+		content, _ := json.Marshal(question)
+		go Follow.AddFeedToFollower(username, string(content))
 	}
 }

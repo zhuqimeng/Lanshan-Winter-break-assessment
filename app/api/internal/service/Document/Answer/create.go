@@ -1,12 +1,14 @@
 package Answer
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path/filepath"
 	"time"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/Document"
+	"zhihu/app/api/internal/service/User/Follow"
 	"zhihu/utils/files"
 
 	"github.com/gin-gonic/gin"
@@ -73,4 +75,6 @@ func Create(c *gin.Context) {
 		"code": http.StatusOK,
 		"data": answer,
 	})
+	content, _ := json.Marshal(answer)
+	go Follow.AddFeedToFollower(username, string(content))
 }

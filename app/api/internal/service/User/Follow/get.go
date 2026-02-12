@@ -1,8 +1,10 @@
 package Follow
 
 import (
+	"encoding/json"
 	"net/http"
 	"zhihu/app/api/configs"
+	"zhihu/app/api/internal/model/Document"
 	"zhihu/app/api/internal/model/User"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +32,7 @@ func GetFollowing(c *gin.Context) {
 	})
 }
 
-func GetFollowerStrings(username string) (error, []string) {
+func getFollowerStrings(username string) (error, []string) {
 	var (
 		followers []User.Relation
 		result    []string
@@ -46,7 +48,7 @@ func GetFollowerStrings(username string) (error, []string) {
 
 func GetFollower(c *gin.Context) {
 	username := c.Param("username")
-	err, followerIDs := GetFollowerStrings(username)
+	err, followerIDs := getFollowerStrings(username)
 	if err != nil {
 		configs.Logger.Error("GetFollower GetFollower err", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -58,4 +60,38 @@ func GetFollower(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": followerIDs,
 	})
+}
+
+func getPost(username string) (error, []string) {
+	var (
+		articles  []Document.Article
+		questions []Document.Question
+		answers   []Document.Answer
+		result    []string
+	)
+	err := configs.Db.Where("username = ?", username).Order("created_at DESC").Limit(20).Find(&articles).Error
+	if err != nil {
+		return err, []string{}
+	}
+	for _, v := range articles {
+		term, _ := json.Marshal(v)
+		result = append(result, string(term))
+	}
+	err = configs.Db.Where("username = ?", username).Order("created_at DESC").Limit(20).Find(&questions).Error
+	if err != nil {
+		return err, []string{}
+	}
+	for _, v := range questions {
+		term, _ := json.Marshal(v)
+		result = append(result, string(term))
+	}
+	err = configs.Db.Where("username = ?", username).Order("created_at DESC").Limit(20).Find(&answers).Error
+	if err != nil {
+		return err, []string{}
+	}
+	for _, v := range answers {
+		term, _ := json.Marshal(v)
+		result = append(result, string(term))
+	}
+	return nil, result
 }
