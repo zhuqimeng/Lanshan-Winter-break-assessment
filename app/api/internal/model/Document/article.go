@@ -11,6 +11,7 @@ type Article struct {
 	Username string `json:"username" gorm:"size:255;not null"`
 	URL      string `json:"url" gorm:"size:255;unique"`
 	LikeNum  int    `json:"like_num" gorm:"default:0"`
+	Summary  string `json:"summary" gorm:"type:longtext;not null"`
 }
 
 func (a *Article) UpdLike(op bool) {
@@ -27,6 +28,7 @@ func (a *Article) Print() gin.H {
 		"title":     a.Title,
 		"url":       a.URL,
 		"like_num":  a.LikeNum,
+		"summary":   a.Summary,
 		"createdAt": a.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 }

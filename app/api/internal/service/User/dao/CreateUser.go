@@ -4,8 +4,8 @@ import (
 	"errors"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
+	"zhihu/utils/Strings"
 	"zhihu/utils/randoms"
-	"zhihu/utils/strings"
 
 	"go.uber.org/zap"
 )
@@ -29,7 +29,7 @@ func CreateUser(req *User.CreateUserReq) error {
 	if err != nil {
 		return err
 	}
-	hash := strings.HashPassword(req.Password + salt)
+	hash := Strings.HashPassword(req.Password + salt)
 	user.Password = salt + "_" + hash
 	// 创建用户信息
 

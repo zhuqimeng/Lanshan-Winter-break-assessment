@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.11.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/redis/go-redis/v9 v9.17.3
+	github.com/sashabaranov/go-openai v1.41.2
 	github.com/spf13/viper v1.21.0
 	go.uber.org/zap v1.27.1
 	gorm.io/driver/mysql v1.6.0

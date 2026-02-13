@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
+	"zhihu/utils/Strings"
 	"zhihu/utils/randoms"
-	"zhihu/utils/strings"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -27,7 +27,7 @@ func UpdPwd(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if strings.VerifyPassword(user.Password, req.OldPassword) == false {
+	if Strings.VerifyPassword(user.Password, req.OldPassword) == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "密码验证错误！"})
 		return
 	}
@@ -36,7 +36,7 @@ func UpdPwd(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	hash := strings.HashPassword(req.NewPassword + salt)
+	hash := Strings.HashPassword(req.NewPassword + salt)
 	user.Password = salt + "_" + hash
 	configs.Db.Save(&user)
 	c.JSON(http.StatusOK, gin.H{

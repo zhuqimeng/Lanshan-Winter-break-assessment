@@ -3,6 +3,7 @@ package dao
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
@@ -10,6 +11,7 @@ import (
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/Document"
 	"zhihu/app/api/internal/service/User/Follow"
+	"zhihu/utils/Strings"
 	"zhihu/utils/files"
 
 	"github.com/gabriel-vasile/mimetype"
@@ -112,10 +114,17 @@ func Create(c *gin.Context) {
 	// 文件本地储存
 
 	if filetype == "article" {
+		mdText, _ := io.ReadAll(fileHeader)
+		plainText := Strings.MdToPlainText(string(mdText))
+		summary, err := configs.Llm.Summarize(plainText, 500)
+		if err != nil {
+			configs.Sugar.Error("Article Summary err", zap.Any("username", username), zap.Error(err))
+		}
 		article := &Document.Article{
 			Username: username,
 			Title:    file.Filename,
 			URL:      "/browse/article/" + filename,
+			Summary:  summary,
 		}
 		result := configs.Db.Create(article)
 		if result.Error != nil {
@@ -133,6 +142,7 @@ func Create(c *gin.Context) {
 				"id":         article.ID,
 				"title":      article.Title,
 				"url":        article.URL,
+				"summary":    article.Summary,
 				"created_at": article.CreatedAt,
 			},
 		})

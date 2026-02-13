@@ -4,7 +4,7 @@ import (
 	"errors"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
-	"zhihu/utils/strings"
+	"zhihu/utils/Strings"
 
 	"go.uber.org/zap"
 )
@@ -18,7 +18,7 @@ func ReadUser(req *User.CreateUserReq) error {
 	}
 	// 查询用户信息
 
-	if strings.VerifyPassword(user.Password, req.Password) == false {
+	if Strings.VerifyPassword(user.Password, req.Password) == false {
 		return errors.New("密码错误！")
 	}
 	return nil
