@@ -60,6 +60,16 @@ func (c *DBConfig) DSN() string {
 		c.Username, c.Password, c.Host, c.Port, c.DBName)
 }
 
+func createChineseFullTextIndex() error {
+	if !Db.Migrator().HasIndex(&Document.Article{}, "idx_articles_search") {
+		sql := `CREATE FULLTEXT INDEX idx_articles_search 
+            ON articles(title, summary) 
+            WITH PARSER ngram`
+		return Db.Exec(sql).Error
+	}
+	return nil
+}
+
 func InitDB() {
 	MyDbConfig, err := LoadDBConfig()
 	if err != nil {
@@ -71,6 +81,10 @@ func InitDB() {
 	}
 	err = Db.AutoMigrate(&User.User{}, &User.LikeUrlUser{}, &User.Relation{}, &User.FeedItem{},
 		&Document.Article{}, &Document.Question{}, &Document.Answer{}, &Document.Comment{})
+	if err != nil {
+		Logger.Fatal("InitDb", zap.Error(err))
+	}
+	err = createChineseFullTextIndex()
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 	}

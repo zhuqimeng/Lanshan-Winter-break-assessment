@@ -99,3 +99,46 @@ func GetTop(c *gin.Context) {
 		"data": result,
 	})
 }
+
+func SearchKeyword(c *gin.Context) {
+	keyword := c.Query("keyword")
+	if keyword == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "搜索词不能为空。",
+		})
+		return
+	}
+	var (
+		articles []Document.Article
+		result   []gin.H
+	)
+	err := configs.Db.Select("*, MATCH(title, summary) AGAINST(?) as relevance", keyword).
+		Where("MATCH(title, summary) AGAINST(?)", keyword).
+		Order("relevance DESC").
+		Find(&articles).Error
+	if err != nil {
+		configs.Logger.Error("SearchKeyword", zap.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code": http.StatusInternalServerError,
+		})
+		return
+	}
+	if len(articles) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "未找到符合条件的结果。",
+		})
+		return
+	}
+	for _, a := range articles {
+		result = append(result, gin.H{
+			"title":    a.Title,
+			"url":      a.URL,
+			"like_num": a.LikeNum,
+			"time":     a.CreatedAt.Format("2006-01-02 15:04:05"),
+			"author":   a.Username,
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": result,
+	})
+}

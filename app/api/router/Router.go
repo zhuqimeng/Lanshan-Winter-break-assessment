@@ -20,6 +20,7 @@ func Router() {
 	r.MaxMultipartMemory = 10 << 20
 	r.GET("", react)
 	r.GET("/top", DocumentDao.GetTop)
+	r.GET("/search", DocumentDao.SearchKeyword)
 	r.GET("/feed", Auth.TokenChecker(), Follow.ShowFeeds)
 	// 默认主页和关注动态
 

@@ -8,7 +8,7 @@ import (
 type Article struct {
 	gorm.Model
 	Title    string `json:"title" gorm:"size:255;not null"`
-	Username string `json:"username" gorm:"size:255;not null"`
+	Username string `json:"username" gorm:"type:varchar(255);size:255;not null"`
 	URL      string `json:"url" gorm:"size:255;unique"`
 	LikeNum  int    `json:"like_num" gorm:"default:0"`
 	Summary  string `json:"summary" gorm:"type:longtext;not null"`
