@@ -46,9 +46,9 @@
 3. 接口文档以及前端界面
    1. 使用了 postman 保存接口文档。
    2. 借助 agent 工具如 copilot、codex 等扫描你的代码并生成前端界面，便于调试。
-4. 站内通知和私信
-   1. 互相关注的人可以互相发送消息私信。
-   2. 当关注的问题或者有人回复你的评论会发送站内通知。
+4. 站内私信（使用了 WebSocket 实现）
+   1. 互相关注的人可以实时发送消息私信。
+   2. 接受者不在线时会把消息暂存在数据库中，当接收者上线时会自动收到未读消息。
 5. 盐选会员
    1. 加入会员的角色管理。
    2. 非会员只能访问某些文章的部分内容。
@@ -83,6 +83,7 @@ LanshanWinterProject
 │  └─ api
 │     ├─ configs
 │     │  ├─ config.yaml
+│     │  ├─ llm.go
 │     │  ├─ logger.go
 │     │  └─ sql.go
 │     ├─ internal
@@ -98,6 +99,10 @@ LanshanWinterProject
 │     │  │  │  ├─ comment.go
 │     │  │  │  └─ question.go
 │     │  │  └─ User
+│     │  │     ├─ feed.go
+│     │  │     ├─ like.go
+│     │  │     ├─ message.go
+│     │  │     ├─ relation.go
 │     │  │     └─ user.go
 │     │  └─ service
 │     │     ├─ Document
@@ -110,19 +115,25 @@ LanshanWinterProject
 │     │     │  └─ dao
 │     │     │     ├─ browse.go
 │     │     │     ├─ create.go
+│     │     │     ├─ like.go
 │     │     │     └─ read.go
+│     │     ├─ Message
+│     │     │  ├─ client.go
+│     │     │  ├─ controller.go
+│     │     │  ├─ hub.go
+│     │     │  └─ model.go
 │     │     ├─ Serach
 │     │     │  ├─ SerachArticle
 │     │     │  ├─ SerachQuestion
 │     │     │  └─ SerachUser
 │     │     └─ User
-│     │        ├─ Admin
 │     │        ├─ dao
 │     │        │  ├─ CreateUser.go
 │     │        │  └─ ReadUser.go
 │     │        ├─ Follow
-│     │        │  ├─ followers
-│     │        │  └─ following
+│     │        │  ├─ feed.go
+│     │        │  ├─ follow.go
+│     │        │  └─ get.go
 │     │        ├─ homepage.go
 │     │        ├─ Sign
 │     │        │  ├─ SignIn.go
@@ -133,7 +144,8 @@ LanshanWinterProject
 │     └─ router
 │        ├─ react.go
 │        ├─ refresh.go
-│        └─ Router.go
+│        ├─ Router.go
+│        └─ websocket.go
 ├─ go.mod
 ├─ go.sum
 ├─ main.go
@@ -141,26 +153,26 @@ LanshanWinterProject
 ├─ Storage
 │  ├─ Document
 │  │  ├─ Answer
-│  │  │  └─ 1770377843667167300-test2.md
 │  │  ├─ Article
-│  │  │  └─ 1770370796889802200-test1.md
+│  │  │  ├─ 1770984344547407100-test1.md
+│  │  │  ├─ 1771053263647365700-test1.md
+│  │  │  └─ 1771053652519400600-test1.md
 │  │  └─ Question
-│  │     └─ 1770372183202854000-test1.md
 │  ├─ Log
 │  │  └─ ZhiHu.log
 │  └─ User
 │     ├─ Avatar
-│     │  └─ test1_1770370243591934400.png
 │     └─ Profile
-│        └─ test1_1770370513029485900.md
 └─ utils
    ├─ files
    │  ├─ detectType.go
    │  └─ headerSet.go
    ├─ randoms
    │  └─ genSalt.go
-   ├─ strings
-   │  └─ Hash.go
+   ├─ Strings
+   │  ├─ Hash.go
+   │  ├─ mdToPlain.go
+   │  └─ split.go
    └─ tokens
       ├─ create.go
       ├─ model.go

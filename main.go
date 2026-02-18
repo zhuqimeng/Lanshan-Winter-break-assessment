@@ -16,6 +16,7 @@ func main() {
 	}()
 	configs.InitDB()
 	configs.InitLlm()
+	hub := router.InitHub()
 	configs.Sugar.Info("init success")
-	router.Router()
+	router.Router(hub)
 }

@@ -6,6 +6,7 @@ import (
 	"zhihu/app/api/internal/service/Document/Answer"
 	"zhihu/app/api/internal/service/Document/Comment"
 	DocumentDao "zhihu/app/api/internal/service/Document/dao"
+	"zhihu/app/api/internal/service/Message"
 	"zhihu/app/api/internal/service/User"
 	"zhihu/app/api/internal/service/User/Follow"
 	"zhihu/app/api/internal/service/User/Sign"
@@ -15,14 +16,18 @@ import (
 	"go.uber.org/zap"
 )
 
-func Router() {
+func Router(hub *Message.Hub) {
 	r := gin.Default()
 	r.MaxMultipartMemory = 10 << 20
+
 	r.GET("", react)
 	r.GET("/top", DocumentDao.GetTop)
-	r.GET("/search", DocumentDao.SearchKeyword)
 	r.GET("/feed", Auth.TokenChecker(), Follow.ShowFeeds)
 	// 默认主页和关注动态
+
+	r.GET("/search", DocumentDao.SearchKeyword)
+	r.GET("/chat", Auth.TokenChecker(), hub.HandleWebSocket)
+	// 文章搜索以及用户私信
 
 	r.GET("/ping", pong)
 	r.POST("/refresh", refresh)
