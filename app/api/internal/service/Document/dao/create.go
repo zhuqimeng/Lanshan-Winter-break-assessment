@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -176,4 +177,15 @@ func Create(c *gin.Context) {
 		content, _ := json.Marshal(question)
 		go Follow.AddFeedToFollower(username, string(content))
 	}
+	ctx := context.Background()
+	cacheKey := fmt.Sprintf("user:%s:%s", username, filetype)
+	// 异步删除缓存
+	go func() {
+		err := configs.Cli.Del(ctx, cacheKey).Err()
+		if err != nil {
+			configs.Logger.Error("Failed to delete cache", zap.Any("username", username), zap.Error(err))
+		} else {
+			configs.Logger.Info("Deleted cache", zap.Any("username", username))
+		}
+	}()
 }

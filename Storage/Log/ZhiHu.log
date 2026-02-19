@@ -138,3 +138,74 @@
 {"level":"INFO","time":"2026-02-18 17:32:16.096","caller":"Message/hub.go:132","msg":"用户下线","username":"test1"}
 {"level":"ERROR","time":"2026-02-18 17:32:16.096","caller":"runtime/asm_amd64.s:1693","msg":"websocket: close sent","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
 {"level":"ERROR","time":"2026-02-18 17:32:16.096","caller":"Message/client.go:95","msg":"close tcp 127.0.0.1:8080->127.0.0.1:54602: use of closed network connection","stacktrace":"zhihu/app/api/internal/service/Message.(*Client).WritePump\n\tD:/Go/LanshanWinterProject/app/api/internal/service/Message/client.go:95"}
+{"level":"INFO","time":"2026-02-19 17:02:41.708","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-19 17:02:52.759","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test1","status":"success"}
+{"level":"INFO","time":"2026-02-19 17:03:27.647","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from database","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:03:27.648","caller":"runtime/asm_amd64.s:1693","msg":"Set response","cacheKey":"user:test1:article"}
+{"level":"INFO","time":"2026-02-19 17:03:57.633","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from cache","username":"test1","filetype":"article"}
+{"level":"INFO","time":"2026-02-19 17:05:47.556","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2024409338906415104","aud":["ZhiHu"],"exp":1771498972,"nbf":1771491772,"iat":1771491772,"jti":"2024409338906415104"}}}
+{"level":"ERROR","time":"2026-02-19 17:05:47.570","caller":"runtime/asm_amd64.s:1693","msg":"Failed to delete cache","username":"test1","error":"context canceled","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"INFO","time":"2026-02-19 17:05:47.573","caller":"runtime/asm_amd64.s:1693","msg":"addFeedToFollower success","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:06:17.587","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from database","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:06:17.587","caller":"runtime/asm_amd64.s:1693","msg":"Set response","cacheKey":"user:test1:question"}
+{"level":"INFO","time":"2026-02-19 17:06:43.336","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from cache","username":"test1","filetype":"question"}
+{"level":"INFO","time":"2026-02-19 17:09:03.806","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-19 17:09:07.122","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2024409338906415104","aud":["ZhiHu"],"exp":1771498972,"nbf":1771491772,"iat":1771491772,"jti":"2024409338906415104"}}}
+{"level":"INFO","time":"2026-02-19 17:14:49.373","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-19 17:15:00.254","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2024409338906415104","aud":["ZhiHu"],"exp":1771498972,"nbf":1771491772,"iat":1771491772,"jti":"2024409338906415104"}}}
+{"level":"INFO","time":"2026-02-19 17:15:00.261","caller":"runtime/asm_amd64.s:1693","msg":"addFeedToFollower success","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:15:00.272","caller":"runtime/asm_amd64.s:1693","msg":"Deleted cache","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:15:23.315","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from database","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:15:23.315","caller":"runtime/asm_amd64.s:1693","msg":"Set response","cacheKey":"user:test1:question"}
+{"level":"INFO","time":"2026-02-19 17:34:11.517","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-19 17:35:59.922","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2024409338906415104","aud":["ZhiHu"],"exp":1771498972,"nbf":1771491772,"iat":1771491772,"jti":"2024409338906415104"}}}
+{"level":"INFO","time":"2026-02-19 17:35:59.923","caller":"Message/hub.go:133","msg":"用户上线","username":"test1"}
+{"level":"INFO","time":"2026-02-19 17:36:19.385","caller":"Message/hub.go:137","msg":"离线消息（已存库）： test1 -> test2"}
+{"level":"INFO","time":"2026-02-19 17:36:35.579","caller":"gin@v1.11.0/context.go:192","msg":"login","username":"test2","status":"success"}
+{"level":"INFO","time":"2026-02-19 17:36:58.764","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2024417823228432384","aud":["ZhiHu"],"exp":1771500995,"nbf":1771493795,"iat":1771493795,"jti":"2024417823228432384"}}}
+{"level":"INFO","time":"2026-02-19 17:36:58.764","caller":"Message/hub.go:133","msg":"用户上线","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:36:58.765","caller":"runtime/asm_amd64.s:1693","msg":"开始推送离线消息","Receiver":"test2","Count":1}
+{"level":"INFO","time":"2026-02-19 17:36:58.776","caller":"runtime/asm_amd64.s:1693","msg":"推送离线消息成功","Receiver":"test2"}
+{"level":"INFO","time":"2026-02-19 17:37:07.935","caller":"Message/hub.go:137","msg":"实时消息： test2 -> test1"}
+{"level":"INFO","time":"2026-02-19 17:37:20.857","caller":"Message/hub.go:137","msg":"实时消息： test1 -> test2"}
+{"level":"INFO","time":"2026-02-19 17:37:29.282","caller":"Message/hub.go:137","msg":"实时消息： test2 -> test1"}
+{"level":"ERROR","time":"2026-02-19 17:37:34.372","caller":"runtime/asm_amd64.s:1693","msg":"WebSocket读取错误websocket: close 1000 (normal)","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"INFO","time":"2026-02-19 17:37:34.372","caller":"Message/hub.go:135","msg":"用户下线","username":"test2"}
+{"level":"ERROR","time":"2026-02-19 17:37:34.372","caller":"runtime/asm_amd64.s:1693","msg":"websocket: close sent","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"ERROR","time":"2026-02-19 17:37:34.372","caller":"Message/client.go:95","msg":"close tcp 127.0.0.1:8080->127.0.0.1:49783: use of closed network connection","stacktrace":"zhihu/app/api/internal/service/Message.(*Client).WritePump\n\tD:/Go/LanshanWinterProject/app/api/internal/service/Message/client.go:95"}
+{"level":"INFO","time":"2026-02-19 17:37:47.602","caller":"Message/hub.go:137","msg":"离线消息（已存库）： test1 -> test2"}
+{"level":"INFO","time":"2026-02-19 17:37:58.187","caller":"Message/hub.go:137","msg":"离线消息（已存库）： test1 -> test2"}
+{"level":"INFO","time":"2026-02-19 17:38:02.089","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2024417823228432384","aud":["ZhiHu"],"exp":1771500995,"nbf":1771493795,"iat":1771493795,"jti":"2024417823228432384"}}}
+{"level":"INFO","time":"2026-02-19 17:38:02.089","caller":"Message/hub.go:133","msg":"用户上线","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:38:02.090","caller":"runtime/asm_amd64.s:1693","msg":"开始推送离线消息","Receiver":"test2","Count":2}
+{"level":"INFO","time":"2026-02-19 17:38:02.095","caller":"runtime/asm_amd64.s:1693","msg":"推送离线消息成功","Receiver":"test2"}
+{"level":"INFO","time":"2026-02-19 17:38:17.594","caller":"Message/hub.go:137","msg":"实时消息： test2 -> test1"}
+{"level":"ERROR","time":"2026-02-19 17:38:22.493","caller":"runtime/asm_amd64.s:1693","msg":"WebSocket读取错误websocket: close 1000 (normal)","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"INFO","time":"2026-02-19 17:38:22.493","caller":"Message/hub.go:135","msg":"用户下线","username":"test1"}
+{"level":"ERROR","time":"2026-02-19 17:38:22.493","caller":"runtime/asm_amd64.s:1693","msg":"websocket: close sent","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"ERROR","time":"2026-02-19 17:38:22.493","caller":"Message/client.go:95","msg":"close tcp 127.0.0.1:8080->127.0.0.1:59209: use of closed network connection","stacktrace":"zhihu/app/api/internal/service/Message.(*Client).WritePump\n\tD:/Go/LanshanWinterProject/app/api/internal/service/Message/client.go:95"}
+{"level":"INFO","time":"2026-02-19 17:38:24.768","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test1","registered_claims":{"iss":"ZhiHu","sub":"2024409338906415104","aud":["ZhiHu"],"exp":1771498972,"nbf":1771491772,"iat":1771491772,"jti":"2024409338906415104"}}}
+{"level":"INFO","time":"2026-02-19 17:38:24.768","caller":"Message/hub.go:133","msg":"用户上线","username":"test1"}
+{"level":"ERROR","time":"2026-02-19 17:38:37.081","caller":"runtime/asm_amd64.s:1693","msg":"WebSocket读取错误websocket: close 1000 (normal)","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"INFO","time":"2026-02-19 17:38:37.081","caller":"Message/hub.go:135","msg":"用户下线","username":"test1"}
+{"level":"ERROR","time":"2026-02-19 17:38:37.081","caller":"runtime/asm_amd64.s:1693","msg":"websocket: close sent","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"ERROR","time":"2026-02-19 17:38:37.081","caller":"Message/client.go:95","msg":"close tcp 127.0.0.1:8080->127.0.0.1:50688: use of closed network connection","stacktrace":"zhihu/app/api/internal/service/Message.(*Client).WritePump\n\tD:/Go/LanshanWinterProject/app/api/internal/service/Message/client.go:95"}
+{"level":"ERROR","time":"2026-02-19 17:38:39.470","caller":"runtime/asm_amd64.s:1693","msg":"WebSocket读取错误websocket: close 1000 (normal)","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"INFO","time":"2026-02-19 17:38:39.470","caller":"Message/hub.go:135","msg":"用户下线","username":"test2"}
+{"level":"ERROR","time":"2026-02-19 17:38:39.470","caller":"runtime/asm_amd64.s:1693","msg":"websocket: close sent","stacktrace":"runtime.goexit\n\tC:/Program Files/Go/src/runtime/asm_amd64.s:1693"}
+{"level":"ERROR","time":"2026-02-19 17:38:39.470","caller":"Message/client.go:95","msg":"close tcp 127.0.0.1:8080->127.0.0.1:58826: use of closed network connection","stacktrace":"zhihu/app/api/internal/service/Message.(*Client).WritePump\n\tD:/Go/LanshanWinterProject/app/api/internal/service/Message/client.go:95"}
+{"level":"INFO","time":"2026-02-19 17:54:27.947","caller":"runtime/proc.go:285","msg":"init success"}
+{"level":"INFO","time":"2026-02-19 17:55:19.125","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2024417823228432384","aud":["ZhiHu"],"exp":1771500995,"nbf":1771493795,"iat":1771493795,"jti":"2024417823228432384"}}}
+{"level":"INFO","time":"2026-02-19 17:56:01.373","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2024417823228432384","aud":["ZhiHu"],"exp":1771500995,"nbf":1771493795,"iat":1771493795,"jti":"2024417823228432384"}}}
+{"level":"INFO","time":"2026-02-19 17:56:01.387","caller":"gin@v1.11.0/context.go:192","msg":"AnsUpd","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:56:01.389","caller":"runtime/asm_amd64.s:1693","msg":"addFeedToFollower success","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:56:01.402","caller":"runtime/asm_amd64.s:1693","msg":"Deleted cache","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:57:53.710","caller":"Auth/AuthUser.go:23","msg":"CheckToken","JWT声明:":{"name":"test2","registered_claims":{"iss":"ZhiHu","sub":"2024417823228432384","aud":["ZhiHu"],"exp":1771500995,"nbf":1771493795,"iat":1771493795,"jti":"2024417823228432384"}}}
+{"level":"INFO","time":"2026-02-19 17:57:53.715","caller":"gin@v1.11.0/context.go:192","msg":"CreateComment","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:57:53.715","caller":"runtime/asm_amd64.s:1693","msg":"Deleted cache","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:58:13.771","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from database","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:58:13.771","caller":"runtime/asm_amd64.s:1693","msg":"Set response","cacheKey":"user:test2:answer"}
+{"level":"INFO","time":"2026-02-19 17:58:26.868","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from cache","username":"test2","filetype":"answer"}
+{"level":"INFO","time":"2026-02-19 17:59:02.011","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from database","username":"test2"}
+{"level":"INFO","time":"2026-02-19 17:59:02.011","caller":"runtime/asm_amd64.s:1693","msg":"Set response","cacheKey":"user:test2:comment"}
+{"level":"INFO","time":"2026-02-19 17:59:15.725","caller":"gin@v1.11.0/context.go:192","msg":"GetUserInfo from cache","username":"test2","filetype":"comment"}

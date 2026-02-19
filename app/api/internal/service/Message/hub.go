@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
 
@@ -12,33 +11,35 @@ import (
 )
 
 // 发送消息给指定用户
-func (h *Hub) sendToUser(username string, msg User.WSMessage) {
+func (h *Hub) sendToUser(username string, msg User.WSMessage) bool {
 	h.mutex.RLock()
 	client, ok := h.clients[username]
 	h.mutex.RUnlock()
 	if !ok {
-		return
+		return false
 	}
 	data, err := json.Marshal(msg)
 	if err != nil {
 		configs.Logger.Error("消息序列化失败", zap.String("Receiver", username), zap.Error(err))
-		return
+		return false
 	}
 	select {
 	case client.Send <- data:
+		return true
 	default:
 		// 发送通道满，直接关闭连接
 		h.mutex.Lock()
 		close(client.Send)
 		delete(h.clients, client.Username)
 		h.mutex.Unlock()
+		return false
 	}
 }
 
 // 推送离线消息
 func (h *Hub) pushOfflineMSG(client *Client) {
 	var messages []User.Message
-	err := configs.Db.Where("receiver_name = ?", client.Username).Order("created_at ASC").Find(&messages).Error
+	err := configs.Db.Where("receiver_name = ? AND delivered = ?", client.Username, false).Order("created_at ASC").Find(&messages).Error
 	if err != nil {
 		configs.Logger.Error("获取离线消息失败", zap.String("Receiver", client.Username), zap.Error(err))
 		return
@@ -56,16 +57,14 @@ func (h *Hub) pushOfflineMSG(client *Client) {
 			Content:      msg.Content,
 			CreatedAt:    msg.CreatedAt,
 		}
-		h.sendToUser(client.Username, User.WSMessage{
+		success := h.sendToUser(client.Username, User.WSMessage{
 			Type: "chat",
 			Data: chatMSG,
 		})
-		time.Sleep(10 * time.Millisecond)
-		// 添加小延时，避免发送太快
-	}
-	err = configs.Db.Where("receiver_name = ?", client.Username).Delete(&User.Message{}).Error
-	if err != nil {
-		configs.Logger.Error("删除离线消息失败", zap.String("Receiver", client.Username), zap.Error(err))
+		if success {
+			// 标记为已发送
+			configs.Db.Model(User.Message{}).Where("id = ?", msg.ID).Update("delivered", true)
+		}
 	}
 	configs.Logger.Info("推送离线消息成功", zap.String("Receiver", client.Username))
 }
@@ -112,10 +111,14 @@ func (h *Hub) handleMessage(message *User.Message) {
 	_, online := h.clients[message.ReceiverName]
 	h.mutex.RUnlock()
 	if online {
-		h.sendToUser(message.ReceiverName, User.WSMessage{
+		success := h.sendToUser(message.ReceiverName, User.WSMessage{
 			Type: "chat",
 			Data: chatMSG,
 		})
+		if success {
+			// 4. 推送成功，标记为已送达
+			configs.Db.Model(&User.Message{}).Where("id = ?", message.ID).Update("delivered", true)
+		}
 		configs.Sugar.Info(fmt.Sprintf("实时消息： %s -> %s", message.SenderName, message.ReceiverName))
 	} else {
 		configs.Sugar.Info(fmt.Sprintf("离线消息（已存库）： %s -> %s", message.SenderName, message.ReceiverName))

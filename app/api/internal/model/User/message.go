@@ -11,6 +11,7 @@ type Message struct {
 	SenderName   string `json:"sender_name" gorm:"not null"`
 	ReceiverName string `json:"receiver_name" gorm:"not null"`
 	Content      string `json:"content" gorm:"type:text;not null"`
+	Delivered    bool   `json:"-" gorm:"default:false;index" ` // 是否已送达
 }
 
 // WSMessage WebSocket消息格式
