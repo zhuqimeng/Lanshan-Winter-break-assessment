@@ -92,4 +92,5 @@ func InitDB() {
 	Cli = redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
+	initBf(Cli)
 }

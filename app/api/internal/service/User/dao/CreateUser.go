@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"context"
 	"errors"
 	"zhihu/app/api/configs"
 	"zhihu/app/api/internal/model/User"
@@ -33,11 +34,11 @@ func CreateUser(req *User.CreateUserReq) error {
 	user.Password = salt + "_" + hash
 	// 创建用户信息
 
-	if err := configs.Db.Create(&user).Error; err != nil {
+	if err = configs.Db.Create(&user).Error; err != nil {
 		configs.Logger.Error("CreateUser", zap.Error(err))
 		return err
 	}
 	// 写入数据库
-
-	return nil
+	err = configs.UserBf.Add(context.Background(), req.Name)
+	return err
 }
