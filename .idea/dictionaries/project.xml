@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>mapstructure</w>
+      <w>zhihu</w>
     </words>
   </dictionary>
 </component>

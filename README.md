@@ -10,46 +10,44 @@
 
 ### 基本功能
 
-1. 基本的用户系统（已完成）
+1. 基本的用户系统
    1. 用户的注册与登录。
    2. 用户的基本信息如头像、个人简介等内容。
    3. 基本的用户鉴权。
    4. 密码的加盐加密。
    5. 用户个人信息的修改
-2. 发布文章、问题；以及能够进行问题的回答、文章的评论。（已完成）
-   1. 发布/获取文章、问题
-   2. 文章格式规范为markdown，且文章可以插入markdown格式的图片链接
-   3. 能够对文章、问题进行回复/评论
+2. 发布文章、问题；以及能够进行问题的回答、文章的评论
+   1. 发布/获取文章、问题。
+   2. 文章格式规范为markdown，且文章可以插入markdown格式的图片链接。
+   3. 能够对文章、问题进行回复/评论。
    4. 对问题进行关注、可以对文章、问题回答进行点赞。
-   5. 按照问题关注度进行排序，做一个热度榜
-3. 关注用户，并能够接收关注的人的动态，对用户下发通知（已完成）
-   1. 关注用户和取消关注
+   5. 按照问题关注度进行排序，做一个热度榜。
+3. 关注用户，并能够接收关注的人的动态，对用户下发通知
+   1. 关注用户和取消关注。
    2. 关注列表和关注者列表。
    3. 可以接收已关注用户的所有动态，采用了异步写扩散方式的 feed 流设计。
-4. 内容的搜索，可以使用 MySQL 的全文索引来做。（已完成）
+4. 内容的搜索，可以使用 MySQL 的全文索引来做
    1. 使用 MySQL95 的全文索引实现搜索功能。
    2. 只对文章的标题和智能总结进行搜索，若搜索词不直接出现在文章中可能无法检测到。
-5. 使用了滑动窗口算法实现限制点赞、评论等操作频率（已完成）
+5. 使用了滑动窗口算法实现限制点赞、评论等操作频率
 
 ### 进阶功能
 
-1. 加入缓存策略（已完成）
+1. 加入缓存策略
    1. 对基本的文章内容等数据进行缓存，并采取合理的缓存策略。
    2. 使用 go 内置的 singleFlight 应对缓存击穿；使用布隆过滤器应对缓存穿透；使用差异化缓存时间应对缓存雪崩。
-2. Docker 打包、部署和安全
+2. Docker 打包
    1. 通过编写 dockerfile 文件来将项目打包成镜像。
-   2. 推送到 dockerhub 或其他的镜像仓库上。
-   3. 部署到自己的服务器上。
-   4. 考虑防止 XSS、SQL 注入、CSRF 等常见安全风险。
-3. 接口文档（已完成）
+   2. 推送到了 dockerhub 上。（名称：zhuqimeng/zhihu-app:v1.0.0）
+3. 接口文档
    1. 使用了 postman 保存接口文档。
 4. 站内私信（使用了 WebSocket 实现）
    1. 互相关注的人可以实时发送消息私信。
    2. 接受者不在线时会把消息暂存在数据库中，当接收者上线时会自动收到未读消息。
-5. 内容总结（已完成）
+5. 内容总结
    1. 通过接入deepseek大模型实现。
    2. 每个文章的总结只需要生成一次即可，后续均访问该缓存。
-6. 配置管理和日志管理（已完成）
+6. 配置管理和日志管理
    1. 通过 viper 加载如 mysql 相关信息的配置文件
    2. 通过 zap 日志库集成日志。
 
@@ -67,6 +65,7 @@ Mysql 的全文索引：https://juejin.cn/post/7524910653062463528
 
 ```
 LanshanWinterProject
+├─ .env
 ├─ .idea
 │  ├─ dictionaries
 │  │  └─ project.xml
@@ -77,6 +76,7 @@ LanshanWinterProject
 ├─ app
 │  └─ api
 │     ├─ configs
+│     │  ├─ bloom.go
 │     │  ├─ config.yaml
 │     │  ├─ llm.go
 │     │  ├─ logger.go
@@ -85,8 +85,7 @@ LanshanWinterProject
 │     │  ├─ middleware
 │     │  │  └─ Auth
 │     │  │     ├─ AuthStatu.go
-│     │  │     ├─ AuthUser.go
-│     │  │     └─ AuthVip.go
+│     │  │     └─ AuthUser.go
 │     │  ├─ model
 │     │  │  ├─ Document
 │     │  │  │  ├─ answer.go
@@ -141,6 +140,8 @@ LanshanWinterProject
 │        ├─ refresh.go
 │        ├─ Router.go
 │        └─ websocket.go
+├─ docker-compose.yaml
+├─ Dockerfile
 ├─ go.mod
 ├─ go.sum
 ├─ main.go
@@ -149,9 +150,7 @@ LanshanWinterProject
 │  ├─ Document
 │  │  ├─ Answer
 │  │  ├─ Article
-│  │  │  ├─ 1770984344547407100-test1.md
-│  │  │  ├─ 1771053263647365700-test1.md
-│  │  │  └─ 1771053652519400600-test1.md
+│  │  │  └─ 1771744998526563353-test1.md
 │  │  └─ Question
 │  ├─ Log
 │  │  └─ ZhiHu.log
@@ -163,6 +162,7 @@ LanshanWinterProject
    │  ├─ detectType.go
    │  └─ headerSet.go
    ├─ randoms
+   │  ├─ genNumber.go
    │  └─ genSalt.go
    ├─ Strings
    │  ├─ Hash.go

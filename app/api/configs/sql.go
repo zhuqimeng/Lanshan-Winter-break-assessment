@@ -3,6 +3,7 @@ package configs
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"zhihu/app/api/internal/model/Document"
 	"zhihu/app/api/internal/model/User"
 
@@ -49,8 +50,21 @@ func LoadDBConfig() (*DBConfig, error) {
 		return nil, fmt.Errorf("解析配置失败: %w", err)
 	}
 
+	if user := os.Getenv("DB_USER"); user != "" {
+		cfg.Username = user
+	}
 	// 4. 设置密码
 	cfg.Password = password
+
+	if host := os.Getenv("DB_HOST"); host != "" {
+		cfg.Host = host
+	}
+
+	if portStr := os.Getenv("DB_PORT"); portStr != "" {
+		if port, err := strconv.Atoi(portStr); err != nil {
+			cfg.Port = port
+		}
+	}
 
 	return &cfg, nil
 }
@@ -89,8 +103,16 @@ func InitDB() {
 	if err != nil {
 		Logger.Fatal("InitDb", zap.Error(err))
 	}
+	redisHost := os.Getenv("REDIS_HOST")
+	if redisHost == "" {
+		redisHost = "127.0.0.1"
+	}
+	redisPort := os.Getenv("REDIS_PORT")
+	if redisPort == "" {
+		redisPort = "6379"
+	}
 	Cli = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: fmt.Sprintf("%s:%s", redisHost, redisPort),
 	})
 	initBf(Cli)
 }

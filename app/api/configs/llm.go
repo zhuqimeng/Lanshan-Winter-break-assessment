@@ -84,5 +84,10 @@ func (s *Summarizer) Summarize(text string, maxLength int) (string, error) {
 }
 
 func InitLlm() {
-	Llm = newSummarizer(os.Getenv("DEEPSEEK_API_KEY"), "https://api.deepseek.com/v1", "deepseek-chat")
+	apiKey := os.Getenv("DEEPSEEK_API_KEY")
+	if apiKey == "" {
+		Logger.Warn("DEEPSEEK_API_KEY environment variable not set")
+		return
+	}
+	Llm = newSummarizer(apiKey, "https://api.deepseek.com/v1", "deepseek-chat")
 }
